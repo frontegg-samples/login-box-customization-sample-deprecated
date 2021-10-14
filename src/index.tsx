@@ -3,12 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { FronteggProvider } from '@frontegg/react';
+
+const contextOptions = {
+    baseUrl: 'https://opensaas.frontegg.com',
+};
+
+// Replace this with your app logo 👇
+const headerImage = 'https://assets.frontegg.com/public-frontegg-assets/acme-logo.svg';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <FronteggProvider contextOptions={contextOptions} headerImage={headerImage}>
+        <App />
+    </FronteggProvider>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
