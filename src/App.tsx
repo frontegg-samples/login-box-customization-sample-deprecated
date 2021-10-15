@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import './App.css';
-import {Action, Fab} from 'react-tiny-fab';
+import {Fab} from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
-import {FaBeer, FaPaintBrush, FaQuestion} from 'react-icons/fa';
+import {FaCode} from 'react-icons/fa';
+import {Accordion, Button, Header} from 'semantic-ui-react';
+import customizationOptions from './options';
 
 import NoCustomizationProvider from './options/0-no-customization';
 import HeaderImageProvider from './options/1-customize-header-image';
@@ -13,10 +15,7 @@ import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 import {ChangeBackground, FlatLoginBox, HeaderImage, None, SplitLayout} from "./options/customization-option";
-import { Header, Segment, Portal } from 'semantic-ui-react'
-
-
-
+import { Segment, Portal } from 'semantic-ui-react';
 
 function loadProvider(option: string) {
     switch (option) {
@@ -33,67 +32,70 @@ function loadProvider(option: string) {
     }
 }
 
-const customizationOptions = [{
-    key: HeaderImage,
-    text: 'Change header image',
-    snippet:
-        `import React from 'react';
-import {FronteggProvider} from '@frontegg/react';
-import contextOptions from './context-options';
-        
-// Replace this with your app logo 👇
-const headerImage = 'https://assets.frontegg.com/public-frontegg-assets/acme-logo.svg';
-
-const Provider = () => (
-    <FronteggProvider contextOptions={contextOptions} headerImage={headerImage}>
-        <div />
-    </FronteggProvider>
-);
-        
-export default Provider;`
-}, {
-    key: ChangeBackground,
-    text: 'Change background image'
-}, {
-    key: FlatLoginBox,
-    text: 'Flatten your login box'
-}, {
-    key: SplitLayout,
-    text: 'Split layout mode'
-}]
-
 function App() {
-    const [showPortal, setShowPortal] = useState(false);
-    const customizationOption = localStorage.getItem('customizationOption') || None;
-    const codeString = customizationOptions[0].snippet;
+    const [showPortal, setShowPortal] = useState(true);
+
+    const savedIndex = sessionStorage.getItem('activeIndex') || '0';
+    const [activeIndex, setActiveIndex] = useState(parseInt(savedIndex));
+
+    const customizationOption = sessionStorage.getItem('customizationOption') || None;
+    const codeString = customizationOptions[activeIndex].snippet;
 
     console.log('showPortal = ', showPortal);
     const setCustomizationOption = (option: string) => {
-        localStorage.setItem('customizationOption', option);
+        sessionStorage.setItem('customizationOption', option);
         window.location.href = 'http://localhost:3000/account/login';
     }
 
     return (
     <div className="App">
-        <Fab alwaysShowTitle={true} icon={<FaPaintBrush />}>
-            {customizationOptions.map((o) => {
-                return <Action text={o.text} onClick={() => setCustomizationOption(o.key)}>
-                    <FaBeer />
-                </Action>
-            })}
-        </Fab>
-        <Fab text={"Help"} style={{left: 24, bottom: 24}} icon={<FaQuestion />} onClick={() => setShowPortal(true)} />
+        {/*<Fab alwaysShowTitle={true} icon={<FaPaintBrush />}>*/}
+        {/*    {customizationOptions.map((o) => {*/}
+        {/*        return <Action text={o.text} onClick={() => setCustomizationOption(o.key)}>*/}
+        {/*            <FaBeer />*/}
+        {/*        </Action>*/}
+        {/*    })}*/}
+        {/*</Fab>*/}
+        {!showPortal  && <Fab text={"Help"} style={{left: 0, bottom: 0}} icon={<FaCode />} onClick={() => setShowPortal(true)} /> }
         { loadProvider(customizationOption) }
         <Portal
             open={showPortal}
-            closeOnTriggerClick
-            openOnTriggerClick
             onClose={() => setShowPortal(false)}
         >
-            <Segment>
-                <SyntaxHighlighter language="javascript" style={docco}>
-                    {codeString}
-                </SyntaxHighlighter>
+            <Segment style={{
+                overflow: 'auto',
+                left: '0',
+                position: 'fixed',
+                top: '0',
+                width: '25%',
+                height: '100vh',
+                zIndex: 1000,
+            }}>
+                <Header>Go over the samples.<br /> Click on the demo button to see how it looks like</Header>
+                <Accordion fluid styled>
+                    {customizationOptions.map((o, index) => {
+                        return <div>
+                            <Accordion.Title index={index} onClick={() => {
+                                sessionStorage.setItem('activeIndex', index.toString());
+                                setActiveIndex(index);
+                            }}>
+                                <div style={{display: 'flex'}}>
+                                <div>
+                                    {o.text}
+                                </div>
+                                <div style={{marginLeft: 'auto'}}>
+                                    <Button size={"tiny"} onClick={() => setCustomizationOption(o.key)}>demo</Button>
+                                </div>
+                                </div>
+                            </Accordion.Title>
+                            <Accordion.Content active={activeIndex === index}>
+                                <SyntaxHighlighter language="javascript" style={docco}>
+                                    {codeString}
+                                </SyntaxHighlighter>
+                            </Accordion.Content>
+                        </div>
+                    })}
+                </Accordion>
             </Segment>
         </Portal>
     </div>
