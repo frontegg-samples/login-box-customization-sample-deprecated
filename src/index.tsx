@@ -3,19 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { FronteggProvider } from '@frontegg/react';
-
-const contextOptions = {
-    baseUrl: 'https://opensaas.frontegg.com',
-};
-
-// Replace this with your app logo 👇
-const headerImage = 'https://assets.frontegg.com/public-frontegg-assets/acme-logo.svg';
+import 'semantic-ui-css/semantic.min.css'
 
 ReactDOM.render(
-    <FronteggProvider contextOptions={contextOptions} headerImage={headerImage}>
-        <App />
-    </FronteggProvider>,
+        <App />,
     document.getElementById('root')
 );
 
