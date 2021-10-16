@@ -6,30 +6,18 @@ import {FaCode} from 'react-icons/fa';
 import {Accordion, Button, Header} from 'semantic-ui-react';
 import customizationOptions from './options';
 
-import NoCustomizationProvider from './options/0-no-customization';
-import HeaderImageProvider from './options/1-customize-header-image';
-import ChangeBackgroundProvider from './options/2-change-background';
-import FlatLoginBoxProvider from './options/3-flat-login-box';
-import SplitLayoutProvider from './options/4-split-layout'
 import SyntaxHighlighter from 'react-syntax-highlighter';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-import {ChangeBackground, FlatLoginBox, HeaderImage, None, SplitLayout} from "./options/customization-option";
+import {
+    HeaderImage,
+    None,
+} from "./options/customization-option";
 import { Segment, Portal } from 'semantic-ui-react';
 
 function loadProvider(option: string) {
-    switch (option) {
-        case HeaderImage:
-            return <HeaderImageProvider />;
-        case ChangeBackground:
-            return <ChangeBackgroundProvider/>
-        case FlatLoginBox:
-            return <FlatLoginBoxProvider />
-        case SplitLayout:
-            return <SplitLayoutProvider />
-        default:
-            return <NoCustomizationProvider />;
-    }
+    const customizationOption = customizationOptions.find(o => o.key === option);
+    return customizationOption?.Provider;
 }
 
 function App() {
@@ -41,10 +29,13 @@ function App() {
     const customizationOption = sessionStorage.getItem('customizationOption') || None;
     const codeString = customizationOptions[activeIndex].snippet;
 
-    console.log('showPortal = ', showPortal);
     const setCustomizationOption = (option: string) => {
         sessionStorage.setItem('customizationOption', option);
         window.location.href = 'http://localhost:3000/account/login';
+    }
+
+    if (customizationOption === None) {
+        setCustomizationOption(HeaderImage);
     }
 
     return (

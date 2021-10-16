@@ -4,3 +4,7 @@ export const ChangeBackground = "ChangeBackground";
 export const FlatLoginBox = "FlatLoginBox";
 export const ChangeButtonsColor = "ChangeButtonsColor";
 export const SplitLayout = "SplitLayout";
+export const SocialLoginsLayout = "SocialLoginsLayout";
+export const SocialLoginsDivider = "SocialLoginsDivider";
+export const AddTermsAndConditions = "AddTermsAndConditions";
+export const CustomizeInputs = "CustomizeInputs";
