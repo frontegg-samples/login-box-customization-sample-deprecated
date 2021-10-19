@@ -8,3 +8,4 @@ export const SocialLoginsLayout = "SocialLoginsLayout";
 export const SocialLoginsDivider = "SocialLoginsDivider";
 export const AddTermsAndConditions = "AddTermsAndConditions";
 export const CustomizeInputs = "CustomizeInputs";
+export const CustomizeLoader = "CustomizeLoader";

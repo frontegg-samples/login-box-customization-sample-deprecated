@@ -5,7 +5,8 @@ import {
     HeaderImage, SocialLoginsDivider,
     SocialLoginsLayout,
     SplitLayout,
-    CustomizeInputs
+    CustomizeInputs,
+    CustomizeLoader
 } from "./options/customization-option";
 
 import HeaderImageProvider from './options/1-customize-header-image';
@@ -16,6 +17,7 @@ import SocialLoginLayoutProvider from './options/5-social-logins-layout';
 import SocialLoginsDividerProvider from './options/6-customize-social-logins-divider';
 import TermsAndConditionsProvider from './options/7-add-terms-and-conditions-footer';
 import CustomizeInputsProvider from './options/8-customize-inputs';
+import CustomizeLoaderProvider from './options/9-customize-loader';
 
 const customizationOptions = [
     {
@@ -455,6 +457,35 @@ const Provider = () => (
 );
 
 export default Provider;`,
+    },
+    {
+        key: CustomizeLoader,
+        text: 'Customize the login loader',
+        Provider: <CustomizeLoaderProvider />,
+        snippet: `import React, {useState} from "react";
+import {FronteggProvider, ThemeOptions} from "@frontegg/react";
+
+import contextOptions from './context-options';
+
+// Replace this with your app logo 👇
+const headerImage = 'https://assets.frontegg.com/public-frontegg-assets/acme-logo.svg';
+
+const MyCustomLoaderComponent = () => {
+    return (
+        <div>I am custom loader and i'm awesome!</div>
+    )
+}
+const Provider = () => {
+    const [loading, setLoading] = useState(false);
+
+    return (
+        <FronteggProvider customLoader={setLoading} contextOptions={contextOptions} headerImage={headerImage}>
+            {loading && <MyCustomLoaderComponent />}
+        </FronteggProvider>
+    )
+};
+
+export default Provider;`
     }
 ]
 
